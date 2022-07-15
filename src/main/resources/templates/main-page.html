@@ -5,6 +5,13 @@
     <title>Main page</title>
 </head>
 <body>
-Hello, user!
+<h2> Hello </h2>
+
+<form th:method="GET" th:object="${wantedObject}" th:action="@{/result}">
+    <label for="objectName"> Input yours object name: </label>
+    <input type="text"  th:field="*{objectName}" objectName="objectName"/>
+    <br><br>
+    <input type="submit" value="GO!">
+</form>
 </body>
 </html>
