@@ -9,9 +9,14 @@
 <tr>
 </tr>
     <td>
-    <td> Brand: </td>
+    <td> Your request: </td>
     <td th:text="${wantedObject.getObjectName()}"></td>
     </td>
 </table>
+<br>
+<div th:each="foundObject : ${resultModel}">
+    <a th:href="@{/{name}(name=${foundObject.getDisplayName()})}" th:text="INFO">info about cars</a>
+    <th th:text="${foundObject.getDisplayName}"></th>
+</div>
 </body>
 </html>
