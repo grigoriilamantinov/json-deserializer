@@ -1,6 +1,5 @@
 package com.manatee.mymap.controllers;
 
-import com.manatee.mymap.entities.FoundObject;
 import com.manatee.mymap.entities.WantedObject;
 import com.manatee.mymap.services.Service;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/")
-public class MainController {
+public class UIController {
     private Service service;
 
-    public MainController(
+    public UIController(
         @Autowired Service service
     ) {
         this.service = service;
@@ -48,6 +47,6 @@ public class MainController {
         var foundObject = searchResult.stream()
             .findFirst().orElseThrow();
         objectModel.addAttribute("objectModel", foundObject);
-        return "object";
+        return "object-page";
     }
 }

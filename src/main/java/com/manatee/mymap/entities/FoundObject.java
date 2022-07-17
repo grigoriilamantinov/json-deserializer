@@ -1,9 +1,16 @@
 package com.manatee.mymap.entities;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.manatee.mymap.entities.geojsons.MultiPolygonGeoJSON;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import java.util.Objects;
-
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode
 public class FoundObject {
 
     @JsonProperty("place_id")
@@ -11,17 +18,6 @@ public class FoundObject {
 
     @JsonProperty("display_name")
     private String displayName;
-
-    private String type;
-
-    public FoundObject() {
-    }
-
-    public FoundObject(Long placeId, String displayName, String type) {
-        this.placeId = placeId;
-        this.displayName = displayName;
-        this.type = type;
-    }
 
     public Long getPlaceId() {
         return placeId;
@@ -39,33 +35,15 @@ public class FoundObject {
         this.displayName = displayName;
     }
 
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        FoundObject that = (FoundObject) o;
-        return Objects.equals(placeId, that.placeId) && Objects.equals(displayName, that.displayName) && Objects.equals(type, that.type);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(placeId, displayName, type);
-    }
+    //    private MultiPolygonGeoJSON geojson;
 
     @Override
     public String toString() {
         return "FoundObject{" +
             "placeId=" + placeId +
             ", displayName='" + displayName + '\'' +
-            ", type='" + type + '\'' +
+            ", multiPolygonGeoJSON=" +
+            ", type='" + '\'' +
             '}';
     }
 }

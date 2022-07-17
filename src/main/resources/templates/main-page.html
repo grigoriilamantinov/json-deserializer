@@ -7,9 +7,9 @@
 <body>
 <h2> Hello </h2>
 
-<form th:method="GET" th:object="${wantedObject}" th:action="@{/result}">
-    <label for="objectName"> Input yours object name: </label>
-    <input type="text"  th:field="*{objectName}" objectName="objectName"/>
+<form th:method="GET" th:action="@{/result}" th:object="${wantedObject}">
+    <label for="objectName">Input yours object name: </label>
+    <input type="text"  th:field="*{objectName}" id="objectName">
     <br><br>
     <input type="submit" value="GO!">
 </form>
