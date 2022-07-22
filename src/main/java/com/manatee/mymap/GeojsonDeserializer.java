@@ -55,19 +55,16 @@ public class GeojsonDeserializer extends StdDeserializer<Geojson> {
                 averageLongitude = longitudeSum / counter;
                 type2 = new Point(averageLatitude, averageLongitude);
                 break;
+
             case "LineString":
                 type3 = node.findValue("coordinates").iterator();
                 while (type3.hasNext()) {
-                    doubles.add(Double.parseDouble(type3.next().asText()));
+                    var pointNode = type3.next();
+                    latitudeSum += pointNode.get(0).asDouble();
+                    longitudeSum += pointNode.get(1).asDouble();
+                    counter++;
                 }
 
-                for (int i = 0; i < doubles.size(); i++) {
-                    if (this.dividesByTwo(i)) {
-                        latitudeSum += doubles.get(i);
-                        longitudeSum += doubles.get(i + 1);
-                        counter++;
-                    }
-                }
                 averageLatitude = latitudeSum / counter;
                 averageLongitude = longitudeSum / counter;
                 type2 = new Point(averageLatitude, averageLongitude);
