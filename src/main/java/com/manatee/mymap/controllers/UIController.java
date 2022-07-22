@@ -21,14 +21,14 @@ public class UIController {
         this.service = service;
     }
 
-    @GetMapping
+    @RequestMapping
     public String showMainPage(final Model wantedObjectModel) {
         WantedObject wantedObject = new WantedObject();
         wantedObjectModel.addAttribute("wantedObject", wantedObject);
         return "main-page";
     }
 
-    @GetMapping("/result")
+    @RequestMapping("/result")
     public String showResultPage(
         @ModelAttribute("wantedObject") final WantedObject wantedObject,
         final Model searchResultModel
@@ -38,15 +38,15 @@ public class UIController {
         return "result-page";
     }
 
-    @GetMapping("/{name}")
-    public String showOneObject(
-        @PathVariable("name") final String name,
-        final Model objectModel
-    ){
-        final var searchResult = service.getSearchResult(name);
-        var foundObject = searchResult.stream()
-            .findFirst().orElseThrow();
-        objectModel.addAttribute("objectModel", foundObject);
-        return "object-page";
-    }
+//    @RequestMapping("/{name}")
+//    public String showOneObject(
+//        @PathVariable("name") final String name,
+//        final Model objectModel
+//    ){
+//        final var searchResult = service.getSearchResult(name);
+//        var foundObject = searchResult.stream()
+//            .findFirst().orElseThrow();
+//        objectModel.addAttribute("objectModel", foundObject);
+//        return "object-page";
+//    }
 }

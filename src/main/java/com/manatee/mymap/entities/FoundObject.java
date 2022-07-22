@@ -1,12 +1,9 @@
 package com.manatee.mymap.entities;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.manatee.mymap.entities.geojsons.MultiPolygonGeoJSON;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,6 +15,9 @@ public class FoundObject {
 
     @JsonProperty("display_name")
     private String displayName;
+
+    @JsonProperty("geojson")
+    private Geojson geojson;
 
     public Long getPlaceId() {
         return placeId;
@@ -35,15 +35,20 @@ public class FoundObject {
         this.displayName = displayName;
     }
 
-    //    private MultiPolygonGeoJSON geojson;
+    public Geojson getGeojson() {
+        return geojson;
+    }
+
+    public void setGeojson(Geojson geoson) {
+        this.geojson = geoson;
+    }
 
     @Override
     public String toString() {
         return "FoundObject{" +
             "placeId=" + placeId +
             ", displayName='" + displayName + '\'' +
-            ", multiPolygonGeoJSON=" +
-            ", type='" + '\'' +
+            ", geoson=" + geojson +
             '}';
     }
 }

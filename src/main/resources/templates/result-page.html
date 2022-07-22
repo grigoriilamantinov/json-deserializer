@@ -17,6 +17,8 @@
 <div th:each="foundObject : ${resultModel}">
     <a th:href="@{/{name}(name=${foundObject.getDisplayName()})}" th:text="INFO"></a>
     <th th:text="${foundObject.getDisplayName}"></th>
+    <th th:text="${foundObject.getGeojson}"></th>
+<!--    <th th:text="${foundObject.getPoint}"></th>-->
 </div>
 </body>
 </html>
