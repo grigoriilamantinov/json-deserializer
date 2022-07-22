@@ -9,10 +9,7 @@ import com.manatee.mymap.entities.Geojson;
 import com.manatee.mymap.entities.Point;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class GeojsonDeserializer extends StdDeserializer<Geojson> {
 
@@ -24,56 +21,76 @@ public class GeojsonDeserializer extends StdDeserializer<Geojson> {
         super(vc);
     }
 
+    double averageLatitude;
+    double averageLongitude;
+    Iterator<JsonNode> coordinatesJSON;
+    Point averagePoint = new Point();
+
     @Override
     public Geojson deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JacksonException {
         JsonNode node = p.getCodec().readTree(p);
         String type = node.get("type").asText();
-        List<Double> doubles = new ArrayList<>();
-        Point type2 = new Point();
-        Double latitudeSum = 0.0;
-        Double longitudeSum = 0.0;
-        int counter = 0;
-        Iterator<JsonNode> type3;
-        Double averageLatitude;
-        Double averageLongitude;
 
         switch (type) {
             case "Point":
-                type3 = node.findValue("coordinates").iterator();
-                while (type3.hasNext()) {
-                    doubles.add(Double.parseDouble(type3.next().asText()));
-                }
-                counter = 0;
-                for (int i = 0; i < doubles.size(); i++) {
-                    if (this.dividesByTwo(i)) {
-                        latitudeSum += doubles.get(i);
-                        longitudeSum += doubles.get(i + 1);
-                        counter++;
-                    }
-                }
-                averageLatitude = latitudeSum / counter;
-                averageLongitude = longitudeSum / counter;
-                type2 = new Point(averageLatitude, averageLongitude);
+                double latitudeSum = 0.0;
+                double longitudeSum = 0.0;
+                coordinatesJSON = node.findValue("coordinates").iterator();
+                    latitudeSum += coordinatesJSON.next().asDouble();
+                    longitudeSum += coordinatesJSON.next().asDouble();
+                averagePoint = new Point(latitudeSum, longitudeSum);
                 break;
 
             case "LineString":
-                type3 = node.findValue("coordinates").iterator();
-                while (type3.hasNext()) {
-                    var pointNode = type3.next();
-                    latitudeSum += pointNode.get(0).asDouble();
-                    longitudeSum += pointNode.get(1).asDouble();
-                    counter++;
-                }
-
-                averageLatitude = latitudeSum / counter;
-                averageLongitude = longitudeSum / counter;
-                type2 = new Point(averageLatitude, averageLongitude);
+                averagePoint = this.getFromLineString(node);
                 break;
+
+            case "MultiPolygon":
+                averagePoint = this.getFromMultiPolygon(node);
+                break;
+
         }
-        return new Geojson(type, type2);
+        return new Geojson(type, averagePoint);
     }
 
-    private boolean dividesByTwo(int a){
-        return (a%2 == 0);
+    private Point getFromLineString(JsonNode node){
+        double latitudeSum = 0.0;
+        double longitudeSum = 0.0;
+        int counter = 0;
+
+        coordinatesJSON = node.findValue("coordinates").iterator();
+        if (node.get("type").asText().equals("MultiPolygon")) {
+            coordinatesJSON.next().get(0).iterator();
+        }
+        while (coordinatesJSON.hasNext()) {
+            var pointNode = coordinatesJSON.next();
+            latitudeSum += pointNode.get(0).asDouble();
+            longitudeSum += pointNode.get(1).asDouble();
+            counter++;
+        }
+        averageLatitude = latitudeSum / counter;
+        averageLongitude = longitudeSum / counter;
+        return new Point(averageLatitude, averageLongitude);
+    }
+
+    private Point getFromMultiPolygon(JsonNode node){
+        double latitudeSum = 0.0;
+        double longitudeSum = 0.0;
+        int counter = 0;
+        coordinatesJSON = node.findValue("coordinates").iterator();
+        while (coordinatesJSON.hasNext()) {
+            var polygon = coordinatesJSON.next().get(0).iterator();
+
+            while (polygon.hasNext()) {
+            var pointNode = polygon.next();
+            latitudeSum += pointNode.get(0).asDouble();
+            longitudeSum += pointNode.get(1).asDouble();
+            counter++;
+            }
+
+        }
+        averageLatitude = latitudeSum / counter;
+        averageLongitude = longitudeSum / counter;
+        return new Point(averageLatitude, averageLongitude);
     }
 }
