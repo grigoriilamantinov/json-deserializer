@@ -1,4 +1,4 @@
-package com.manatee.mymap;
+package com.manatee.mymap.common;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
@@ -21,19 +21,16 @@ public class GeojsonDeserializer extends StdDeserializer<Geojson> {
         super(vc);
     }
 
-    double averageLatitude;
-    double averageLongitude;
     private final static Pattern coordinatePattern = Pattern.compile("\\d+[.]\\d+");
 
     @Override
     public Geojson deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
-        Matcher coordinatesMatcher;
+        final JsonNode node = p.getCodec().readTree(p);
+        final var coordinatesAsString = String.valueOf(node.get("coordinates"));
+
+        final Matcher coordinatesMatcher = coordinatePattern.matcher(coordinatesAsString);
         double latitudeSum = 0.0;
         double longitudeSum = 0.0;
-        JsonNode node = p.getCodec().readTree(p);
-        String type = node.get("type").asText();
-        final var coordinatesAsString = String.valueOf(node.get("coordinates"));
-        coordinatesMatcher = coordinatePattern.matcher(coordinatesAsString);
         int counter = 0;
 
         for (int i = 0; coordinatesMatcher.find(); i++) {
@@ -44,8 +41,10 @@ public class GeojsonDeserializer extends StdDeserializer<Geojson> {
                 longitudeSum += Double.parseDouble(coordinatesMatcher.group());
             }
         }
-        averageLatitude = latitudeSum / counter;
-        averageLongitude = longitudeSum / counter;
+
+        final double averageLatitude = latitudeSum / counter;
+        final double averageLongitude = longitudeSum / counter;
+        final String type = node.get("type").asText();
 
         return new Geojson(type, new AveragePoint(averageLatitude, averageLongitude));
     }

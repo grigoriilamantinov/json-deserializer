@@ -1,15 +1,14 @@
 package com.manatee.mymap.entities;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.manatee.mymap.GeojsonDeserializer;
+import com.manatee.mymap.common.GeojsonDeserializer;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
 @JsonDeserialize(using = GeojsonDeserializer.class)
 public class Geojson {
     String type;
     AveragePoint averagePoint;
-
-    public Geojson() {
-    }
 
     public Geojson(String type, AveragePoint point) {
         this.type = type;

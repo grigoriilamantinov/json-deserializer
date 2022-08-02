@@ -19,7 +19,16 @@ public class MyMapService implements Service {
     }
 
     @Override
-    public List<FoundObject> getSearchResult(String objectName) {
-        return request.getRequest(objectName);
+    public List<FoundObject> getSearchResult(final String searchName) {
+        return request.getRequest(searchName);
     }
+
+    @Override
+    public FoundObject getOneObject(final String objectName) {
+        return this.getSearchResult(objectName).stream()
+            .findFirst()
+            .orElseThrow(() -> new IllegalStateException(
+                String.format("There is no object with name %s", objectName)));
+    }
+
 }

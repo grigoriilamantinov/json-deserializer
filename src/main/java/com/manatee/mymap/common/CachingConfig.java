@@ -1,4 +1,4 @@
-package com.manatee.mymap;
+package com.manatee.mymap.common;
 
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;

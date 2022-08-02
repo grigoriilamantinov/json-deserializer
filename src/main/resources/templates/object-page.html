@@ -5,10 +5,9 @@
     <title>Object</title>
 </head>
 <body>
-Hello
-
-<br><br>
-<p th:text="${objectModel.getDisplayName}" />
+<h3>
+Welcome to <th th:text="${objectModel.getDisplayName()}"></th>!
+</h3>
 <p th:text="${objectModel.getGeojson}" />
 <br><br>
 </body>

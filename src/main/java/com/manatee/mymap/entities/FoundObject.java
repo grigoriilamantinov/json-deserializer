@@ -3,11 +3,15 @@ package com.manatee.mymap.entities;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
+@Getter
+@Setter
 public class FoundObject {
 
     @JsonProperty("place_id")
@@ -18,14 +22,6 @@ public class FoundObject {
 
     @JsonProperty("geojson")
     private Geojson geojson;
-
-    public Long getPlaceId() {
-        return placeId;
-    }
-
-    public void setPlaceId(Long placeId) {
-        this.placeId = placeId;
-    }
 
     public String getDisplayName() {
         return displayName;
@@ -39,8 +35,8 @@ public class FoundObject {
         return geojson;
     }
 
-    public void setGeojson(Geojson geoson) {
-        this.geojson = geoson;
+    public void setGeojson(Geojson geojson) {
+        this.geojson = geojson;
     }
 
     @Override

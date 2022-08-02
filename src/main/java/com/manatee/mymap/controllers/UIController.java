@@ -22,8 +22,7 @@ public class UIController {
 
     @RequestMapping
     public String showMainPage(final Model wantedObjectModel) {
-        WantedObject wantedObject = new WantedObject();
-        wantedObjectModel.addAttribute("wantedObject", wantedObject);
+        wantedObjectModel.addAttribute("wantedObject", new WantedObject());
         return "main-page";
     }
 
@@ -39,13 +38,10 @@ public class UIController {
 
     @RequestMapping("/{name}")
     public String showOneObject(
-        @PathVariable("name") final String name,
+        @PathVariable("name") final String objectName,
         final Model objectModel
     ){
-        final var searchResult = service.getSearchResult(name);
-        var foundObject = searchResult.stream()
-            .findFirst().orElseThrow();
-        objectModel.addAttribute("objectModel", foundObject);
+        objectModel.addAttribute("objectModel", service.getOneObject(objectName));
         return "object-page";
     }
 }

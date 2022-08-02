@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
-public class RequestToOpenStreetMap implements Request {
+public class RequestToOpenStreetMap implements Request<FoundObject> {
 
     @Value("${FIRST_PART_URL}")
     private String FIRST_PART_URL;
