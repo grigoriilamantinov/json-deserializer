@@ -1,13 +1,14 @@
 package com.manatee.mymap.entities;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.manatee.mymap.common.GeojsonDeserialaizerLegacy;
 import com.manatee.mymap.common.GeojsonDeserializer;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @NoArgsConstructor
-@JsonDeserialize(using = GeojsonDeserializer.class)
+@JsonDeserialize(using = GeojsonDeserialaizerLegacy.class)
 public class Geojson {
     String type;
     List<Double> coordinates;
@@ -36,20 +37,20 @@ public class Geojson {
         return new AveragePoint(averageLatitude, averageLongitude);
     }
 
-    public List<Double> getCoordinates() {
-        return coordinates;
-    }
-
-    public void setCoordinates(List<Double> coordinates) {
-        this.coordinates = coordinates;
-    }
-
     public String getType() {
         return type;
     }
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public List<Double> getCoordinates() {
+        return coordinates;
+    }
+
+    public void setCoordinates(List<Double> coordinates) {
+        this.coordinates = coordinates;
     }
 
     @Override

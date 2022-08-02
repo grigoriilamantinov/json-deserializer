@@ -42,6 +42,7 @@ public class UIController {
         final Model objectModel
     ){
         objectModel.addAttribute("objectModel", service.getOneObject(objectName));
+        System.out.println();
         return "object-page";
     }
 }
