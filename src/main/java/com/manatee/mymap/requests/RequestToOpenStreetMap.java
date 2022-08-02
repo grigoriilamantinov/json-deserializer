@@ -2,6 +2,7 @@ package com.manatee.mymap.requests;
 
 import com.manatee.mymap.entities.FoundObject;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -19,6 +20,7 @@ public class RequestToOpenStreetMap implements Request {
     private String LAST_PART_URL;
 
     @Override
+    @Cacheable("main_cache")
     public List<FoundObject> getRequest(String string) {
         String url = FIRST_PART_URL + string + LAST_PART_URL;
         RestTemplate restTemplate = new RestTemplate();
