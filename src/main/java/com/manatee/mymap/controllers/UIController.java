@@ -36,7 +36,7 @@ public class UIController {
         return "result-page";
     }
 
-    @RequestMapping("/{name}")
+    @RequestMapping("/result/object/{name}")
     public String showOneObject(
         @PathVariable("name") final String objectName,
         final Model objectModel

@@ -10,7 +10,7 @@ Search results on demand <th th:text="${wantedObject.getObjectName()}"></th>:
 </h3>
 <br>
 <div th:each="foundObject : ${resultModel}">
-    <a th:href="@{/{name}(name=${foundObject.getDisplayName()})}" th:text="INFO"></a>
+    <a th:href="@{/result/object/{name}(name=${foundObject.getDisplayName()})}" th:text="INFO"></a>
     <th th:text="${foundObject.getDisplayName}"></th>
 </div>
 </body>

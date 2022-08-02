@@ -8,7 +8,9 @@
 <h3>
 Welcome to <th th:text="${objectModel.getDisplayName()}"></th>!
 </h3>
-<p th:text="${objectModel.getGeojson}" />
-<br><br>
+<p th:text="${objectModel.getGeojson.getAverageCoordinates(objectModel.getGeojson.getCoordinates)}" />
+<br>
+<br>
+<a th:href="@{/}" th:text="'BACK TO MAIN'"></a>
 </body>
 </html>

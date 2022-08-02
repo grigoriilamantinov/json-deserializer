@@ -13,4 +13,8 @@ public class WantedObject {
     public String getObjectName() {
         return objectName;
     }
+
+    public void setObjectName(String objectName) {
+        this.objectName = objectName;
+    }
 }

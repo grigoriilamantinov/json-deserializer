@@ -4,23 +4,44 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.manatee.mymap.common.GeojsonDeserializer;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @NoArgsConstructor
 @JsonDeserialize(using = GeojsonDeserializer.class)
 public class Geojson {
     String type;
-    AveragePoint averagePoint;
+    List<Double> coordinates;
 
-    public Geojson(String type, AveragePoint point) {
+    public Geojson(String type, List<Double> coordinates) {
         this.type = type;
-        this.averagePoint = point;
+        this.coordinates = coordinates;
     }
 
-    public AveragePoint getAveragePoint() {
-        return averagePoint;
+    public AveragePoint getAverageCoordinates(List<Double> coordinates) {
+        double latitudeSum = 0.0;
+        double longitudeSum = 0.0;
+        int counter = 0;
+
+        for (int i = 0; i < coordinates.size(); i++) {
+            if (i %2 == 0) {
+                latitudeSum += coordinates.get(i);
+                counter++;
+            } else {
+                longitudeSum += coordinates.get(i);
+            }
+        }
+
+        final double averageLatitude = latitudeSum / counter;
+        final double averageLongitude = longitudeSum / counter;
+        return new AveragePoint(averageLatitude, averageLongitude);
     }
 
-    public void setAveragePoint(AveragePoint averagePoint) {
-        this.averagePoint = averagePoint;
+    public List<Double> getCoordinates() {
+        return coordinates;
+    }
+
+    public void setCoordinates(List<Double> coordinates) {
+        this.coordinates = coordinates;
     }
 
     public String getType() {
@@ -33,6 +54,6 @@ public class Geojson {
 
     @Override
     public String toString() {
-        return "GeoJSON type: " + type + ". " + averagePoint;
+        return "GeoJSON type: " + type + ". " + coordinates;
     }
 }

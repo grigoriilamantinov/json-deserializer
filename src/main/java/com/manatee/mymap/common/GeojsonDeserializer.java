@@ -5,9 +5,10 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.manatee.mymap.entities.Geojson;
-import com.manatee.mymap.entities.AveragePoint;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -29,48 +30,28 @@ public class GeojsonDeserializer extends StdDeserializer<Geojson> {
         final var coordinatesAsString = String.valueOf(node.get("coordinates"));
 
         final Matcher coordinatesMatcher = coordinatePattern.matcher(coordinatesAsString);
-        double latitudeSum = 0.0;
-        double longitudeSum = 0.0;
-        int counter = 0;
+        List<Double> coordinates = new ArrayList<>();
 
-        for (int i = 0; coordinatesMatcher.find(); i++) {
-            if (i %2 == 0) {
-                latitudeSum += Double.parseDouble(coordinatesMatcher.group());
-                counter++;
-            } else {
-                longitudeSum += Double.parseDouble(coordinatesMatcher.group());
-            }
+        while (coordinatesMatcher.find()) {
+            coordinates.add(Double.parseDouble(coordinatesMatcher.group()));
         }
 
-        final double averageLatitude = latitudeSum / counter;
-        final double averageLongitude = longitudeSum / counter;
         final String type = node.get("type").asText();
 
-        return new Geojson(type, new AveragePoint(averageLatitude, averageLongitude));
+        return new Geojson(type, coordinates);
     }
 
-//    private Point getFromLineString(JsonNode node){
-//        double latitudeSum = 0.0;
-//        double longitudeSum = 0.0;
-//        int counter = 0;
-//
-//        coordinatesJSON = node.findValue("coordinates").iterator();
-//
+//    private Geojson getFromLineString(JsonNode node){
+//        var coordinatesJSON = node.findValue("coordinates").iterator();
+//        List<Double> coordinates = new ArrayList<>();
 //        while (coordinatesJSON.hasNext()) {
 //            var pointNode = coordinatesJSON.next();
-//            latitudeSum += pointNode.get(0).asDouble();
-//            longitudeSum += pointNode.get(1).asDouble();
-//            counter++;
-//        }
-//        averageLatitude = latitudeSum / counter;
-//        averageLongitude = longitudeSum / counter;
-//        return new Point(averageLatitude, averageLongitude);
+//            coordinates.add()
+//       }
+//        return new Geojson(type, coordinates);
 //    }
 //
 //    private Point getFromMultiPolygon(JsonNode node){
-//        double latitudeSum = 0.0;
-//        double longitudeSum = 0.0;
-//        int counter = 0;
 //        Iterator<JsonNode> polygon;
 //        coordinatesJSON = node.findValue("coordinates").iterator();
 //        while (coordinatesJSON.hasNext()) {
@@ -88,8 +69,7 @@ public class GeojsonDeserializer extends StdDeserializer<Geojson> {
 //            }
 //
 //        }
-//        averageLatitude = latitudeSum / counter;
-//        averageLongitude = longitudeSum / counter;
-//        return new Point(averageLatitude, averageLongitude);
+//
+//        return new Geojson(type, coordinates);
 //    }
 }
