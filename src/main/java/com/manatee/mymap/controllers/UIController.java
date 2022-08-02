@@ -38,15 +38,15 @@ public class UIController {
         return "result-page";
     }
 
-//    @RequestMapping("/{name}")
-//    public String showOneObject(
-//        @PathVariable("name") final String name,
-//        final Model objectModel
-//    ){
-//        final var searchResult = service.getSearchResult(name);
-//        var foundObject = searchResult.stream()
-//            .findFirst().orElseThrow();
-//        objectModel.addAttribute("objectModel", foundObject);
-//        return "object-page";
-//    }
+    @RequestMapping("/{name}")
+    public String showOneObject(
+        @PathVariable("name") final String name,
+        final Model objectModel
+    ){
+        final var searchResult = service.getSearchResult(name);
+        var foundObject = searchResult.stream()
+            .findFirst().orElseThrow();
+        objectModel.addAttribute("objectModel", foundObject);
+        return "object-page";
+    }
 }

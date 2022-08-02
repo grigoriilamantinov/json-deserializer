@@ -6,22 +6,22 @@ import com.manatee.mymap.GeojsonDeserializer;
 @JsonDeserialize(using = GeojsonDeserializer.class)
 public class Geojson {
     String type;
-    Point point;
+    AveragePoint averagePoint;
 
     public Geojson() {
     }
 
-    public Geojson(String type, Point point) {
+    public Geojson(String type, AveragePoint point) {
         this.type = type;
-        this.point = point;
+        this.averagePoint = point;
     }
 
-    public Point getPoint() {
-        return point;
+    public AveragePoint getAveragePoint() {
+        return averagePoint;
     }
 
-    public void setPoint(Point point) {
-        this.point = point;
+    public void setAveragePoint(AveragePoint averagePoint) {
+        this.averagePoint = averagePoint;
     }
 
     public String getType() {
@@ -34,9 +34,6 @@ public class Geojson {
 
     @Override
     public String toString() {
-        return "Geojson{" +
-            "type='" + type + '\'' +
-            ", point=" + point +
-            '}';
+        return "GeoJSON type: " + type + ". " + averagePoint;
     }
 }

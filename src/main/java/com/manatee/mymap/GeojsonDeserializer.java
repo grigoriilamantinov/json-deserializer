@@ -1,12 +1,11 @@
 package com.manatee.mymap;
 
-import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.manatee.mymap.entities.Geojson;
-import com.manatee.mymap.entities.Point;
+import com.manatee.mymap.entities.AveragePoint;
 
 import java.io.IOException;
 import java.util.regex.Matcher;
@@ -27,7 +26,7 @@ public class GeojsonDeserializer extends StdDeserializer<Geojson> {
     private final static Pattern coordinatePattern = Pattern.compile("\\d+[.]\\d+");
 
     @Override
-    public Geojson deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JacksonException {
+    public Geojson deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
         Matcher coordinatesMatcher;
         double latitudeSum = 0.0;
         double longitudeSum = 0.0;
@@ -48,7 +47,7 @@ public class GeojsonDeserializer extends StdDeserializer<Geojson> {
         averageLatitude = latitudeSum / counter;
         averageLongitude = longitudeSum / counter;
 
-        return new Geojson(type, new Point(averageLatitude, averageLongitude));
+        return new Geojson(type, new AveragePoint(averageLatitude, averageLongitude));
     }
 
 //    private Point getFromLineString(JsonNode node){
