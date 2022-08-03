@@ -1,12 +1,10 @@
 package com.manatee.mymap.common;
 
-import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.manatee.mymap.entities.Geojson;
-import com.manatee.mymap.entities.Point;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -23,67 +21,68 @@ public class GeojsonDeserialaizerLegacy extends StdDeserializer<Geojson> {
         super(vc);
     }
 
-    double averageLatitude;
-    double averageLongitude;
-    Iterator<JsonNode> coordinatesJSON;
-    Point averagePoint = new Point();
-
     @Override
-    public Geojson deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JacksonException {
+    public Geojson deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
         JsonNode node = p.getCodec().readTree(p);
         String type = node.get("type").asText();
-
-        Geojson geojson = new Geojson("0", new ArrayList<>());
+        List<Double> coordinates = new ArrayList<>();
+        var coordinatesJSON = node.findValue("coordinates").iterator();
         switch (type) {
-//            case "Point":
-//                double latitudeSum = 0.0;
-//                double longitudeSum = 0.0;
-//                coordinatesJSON = node.findValue("coordinates").iterator();
-//                latitudeSum += coordinatesJSON.next().asDouble();
-//                longitudeSum += coordinatesJSON.next().asDouble();
-//                averagePoint = new Point(latitudeSum, longitudeSum);
-//                break;
-
+            case "Point":
+                coordinates = this.getFromPoint(coordinatesJSON);
+                break;
             case "LineString":
-                geojson = this.getFromLineString(node);
+                coordinates = this.getFromLineString(coordinatesJSON);
                 break;
-
+            case "Polygon":
+            case "MultiLineString":
+                coordinates = this.getFromMultiLineString(coordinatesJSON);
+                break;
             case "MultiPolygon":
-                geojson = this.getFromMultiPolygon(node);
+                coordinates = this.getFromMultiPolygon(coordinatesJSON);
                 break;
-
         }
-        return geojson;
+        return new Geojson(type, coordinates);
     }
 
-    private Geojson getFromLineString(JsonNode node){
-        var coordinatesJSON = node.findValue("coordinates").iterator();
+    private List<Double> getFromPoint(Iterator<JsonNode> pointNode){
         List<Double> coordinates = new ArrayList<>();
-        while (coordinatesJSON.hasNext()) {
-            var pointNode = coordinatesJSON.next();
+            coordinates.add(pointNode.next().asDouble());
+            coordinates.add(pointNode.next().asDouble());
+        return coordinates;
+    }
+
+    private List<Double> getFromLineString(Iterator<JsonNode> lineStringNode){
+        List<Double> coordinates = new ArrayList<>();
+        while (lineStringNode.hasNext()) {
+            var pointNode = lineStringNode.next();
             coordinates.add(pointNode.get(0).asDouble());
             coordinates.add(pointNode.get(1).asDouble());
         }
-        String type = node.get("type").asText();
-        return new Geojson(type, coordinates);
+        return coordinates;
     }
 
-    private Geojson getFromMultiPolygon(JsonNode node){
-        coordinatesJSON = node.findValue("coordinates").iterator();
+    private List<Double> getFromMultiLineString(Iterator<JsonNode> multiLineStringNode){
         List<Double> coordinates = new ArrayList<>();
-
-        while (coordinatesJSON.hasNext()) {
-            var polygon = coordinatesJSON.next().get(0).iterator();
-
-        while (polygon.hasNext()) {
-        var pointNode = polygon.next();
-        coordinates.add(pointNode.get(0).asDouble());
-        coordinates.add(pointNode.get(1).asDouble());
-    }
-
+        while (multiLineStringNode.hasNext()) {
+            var lineStringNode = multiLineStringNode.next().iterator();
+            while (lineStringNode.hasNext()) {
+                var pointNode = lineStringNode.next();
+                coordinates.add(pointNode.get(0).asDouble());
+                coordinates.add(pointNode.get(1).asDouble());
+            }
         }
-        String type = node.get("type").asText();
-        return new Geojson(type, coordinates);
+        return coordinates;
     }
+
+    private List<Double> getFromMultiPolygon(Iterator<JsonNode> coordinatesJSON){
+        List<Double> coordinates = new ArrayList<>();
+        while (coordinatesJSON.hasNext()) {
+            var polygon = coordinatesJSON.next().iterator();
+            coordinates.addAll(this.getFromMultiLineString(polygon));
+        }
+        return coordinates;
+    }
+
 }
 

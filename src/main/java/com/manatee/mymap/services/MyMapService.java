@@ -24,8 +24,9 @@ public class MyMapService implements Service {
     }
 
     @Override
-    public FoundObject getOneObject(final String objectName) {
+    public FoundObject getOneObject(final String objectName, final Long id) {
         return this.getSearchResult(objectName).stream()
+            .filter(object -> object.getPlaceId().equals(id))
             .findFirst()
             .orElseThrow(() -> new IllegalStateException(
                 String.format("There is no object with name %s", objectName)));

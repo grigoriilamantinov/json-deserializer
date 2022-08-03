@@ -1,5 +1,6 @@
 package com.manatee.mymap.controllers;
 
+import com.manatee.mymap.entities.FoundObject;
 import com.manatee.mymap.entities.WantedObject;
 import com.manatee.mymap.services.Service;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/")
@@ -36,13 +40,13 @@ public class UIController {
         return "result-page";
     }
 
-    @RequestMapping("/result/object/{name}")
+    @RequestMapping("/object/{name}/{id}")
     public String showOneObject(
         @PathVariable("name") final String objectName,
+        @PathVariable("id") final Long id,
         final Model objectModel
-    ){
-        objectModel.addAttribute("objectModel", service.getOneObject(objectName));
-        System.out.println();
+        ){
+        objectModel.addAttribute("objectModel", service.getOneObject(objectName, id));
         return "object-page";
     }
 }

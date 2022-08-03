@@ -37,39 +37,6 @@ public class GeojsonDeserializer extends StdDeserializer<Geojson> {
         }
 
         final String type = node.get("type").asText();
-
         return new Geojson(type, coordinates);
     }
-
-//    private Geojson getFromLineString(JsonNode node){
-//        var coordinatesJSON = node.findValue("coordinates").iterator();
-//        List<Double> coordinates = new ArrayList<>();
-//        while (coordinatesJSON.hasNext()) {
-//            var pointNode = coordinatesJSON.next();
-//            coordinates.add()
-//       }
-//        return new Geojson(type, coordinates);
-//    }
-//
-//    private Point getFromMultiPolygon(JsonNode node){
-//        Iterator<JsonNode> polygon;
-//        coordinatesJSON = node.findValue("coordinates").iterator();
-//        while (coordinatesJSON.hasNext()) {
-//            if(node.get("type").asText().equals("Polygon")) {
-//                polygon = coordinatesJSON.next().get(0).iterator();
-//            } else {
-//                polygon = coordinatesJSON.next().iterator();
-//            }
-//
-//            while (polygon.hasNext()) {
-//            var pointNode = polygon.next();
-//            latitudeSum += pointNode.get(0).asDouble();
-//            longitudeSum += pointNode.get(1).asDouble();
-//            counter++;
-//            }
-//
-//        }
-//
-//        return new Geojson(type, coordinates);
-//    }
 }

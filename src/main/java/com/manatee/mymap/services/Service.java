@@ -8,5 +8,5 @@ public interface Service {
 
     List<FoundObject> getSearchResult(String objectName);
 
-    FoundObject getOneObject(String objectName);
+    FoundObject getOneObject(String objectName, Long id);
 }

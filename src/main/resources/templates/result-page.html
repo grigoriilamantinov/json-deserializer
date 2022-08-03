@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Result</title>
@@ -10,9 +10,9 @@ Search results on demand <th th:text="${wantedObject.getObjectName()}"></th>:
 </h3>
 <br>
 <div th:each="foundObject : ${resultModel}">
-    <a th:href="@{/result/object/{name}(name=${foundObject.getDisplayName()})}" th:text="INFO"></a>
+    <a th:href="@{/object/{name}/{id}(name=${foundObject.getDisplayName()}, id=${foundObject.getPlaceId()})}" th:text="INFO"></a>
     <th th:text="${foundObject.getDisplayName}"></th>
     <th th:text="${foundObject.getGeojson.getType}"></th>
-</div>
+    </div>
 </body>
 </html>

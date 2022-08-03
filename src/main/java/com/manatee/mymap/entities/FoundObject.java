@@ -23,6 +23,14 @@ public class FoundObject {
     @JsonProperty("geojson")
     private Geojson geojson;
 
+    public Long getPlaceId() {
+        return placeId;
+    }
+
+    public void setPlaceId(Long placeId) {
+        this.placeId = placeId;
+    }
+
     public String getDisplayName() {
         return displayName;
     }

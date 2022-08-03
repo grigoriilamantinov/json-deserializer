@@ -17,4 +17,11 @@ public class WantedObject {
     public void setObjectName(String objectName) {
         this.objectName = objectName;
     }
+
+    @Override
+    public String toString() {
+        return "WantedObject{" +
+            "objectName='" + objectName + '\'' +
+            '}';
+    }
 }
