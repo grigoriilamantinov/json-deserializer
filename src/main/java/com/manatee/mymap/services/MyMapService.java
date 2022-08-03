@@ -1,6 +1,6 @@
 package com.manatee.mymap.services;
 
-import com.manatee.mymap.entities.FoundObject;
+import com.manatee.mymap.dto.FoundObject;
 import com.manatee.mymap.requests.Request;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

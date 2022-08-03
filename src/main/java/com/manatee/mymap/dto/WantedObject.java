@@ -1,4 +1,4 @@
-package com.manatee.mymap.entities;
+package com.manatee.mymap.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;

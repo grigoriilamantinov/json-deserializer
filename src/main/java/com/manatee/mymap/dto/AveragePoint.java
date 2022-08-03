@@ -1,4 +1,4 @@
-package com.manatee.mymap.entities;
+package com.manatee.mymap.dto;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -6,16 +6,14 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
-import javax.management.ConstructorParameters;
-
 @Getter
 @Setter
 @EqualsAndHashCode
 @NoArgsConstructor
 @RequiredArgsConstructor
 public class AveragePoint {
-    Double averageLatitude;
-    Double averageLongitude;
+    private Double averageLatitude;
+    private Double averageLongitude;
 
     public AveragePoint(Double latitude, Double longitude) {
         this.averageLatitude = latitude;

@@ -1,6 +1,6 @@
 package com.manatee.mymap.requests;
 
-import com.manatee.mymap.entities.FoundObject;
+import com.manatee.mymap.dto.FoundObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
@@ -21,8 +21,8 @@ public class RequestToOpenStreetMap implements Request<FoundObject> {
 
     @Override
     @Cacheable("main_cache")
-    public List<FoundObject> getRequest(String string) {
-        String url = FIRST_PART_URL + string + LAST_PART_URL;
+    public List<FoundObject> getRequest(final String wantedObject) {
+        String url = FIRST_PART_URL + wantedObject + LAST_PART_URL;
         RestTemplate restTemplate = new RestTemplate();
         final var responseEntity = restTemplate.getForObject(url, FoundObject[].class);
         System.out.println();

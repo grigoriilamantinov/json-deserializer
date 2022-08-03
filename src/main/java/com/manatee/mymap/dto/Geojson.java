@@ -1,8 +1,7 @@
-package com.manatee.mymap.entities;
+package com.manatee.mymap.dto;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.manatee.mymap.common.GeojsonDeserialaizerLegacy;
-import com.manatee.mymap.common.GeojsonDeserializer;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
@@ -10,8 +9,8 @@ import java.util.List;
 @NoArgsConstructor
 @JsonDeserialize(using = GeojsonDeserialaizerLegacy.class)
 public class Geojson {
-    String type;
-    List<Double> coordinates;
+    private String type;
+    private List<Double> coordinates;
 
     public Geojson(String type, List<Double> coordinates) {
         this.type = type;

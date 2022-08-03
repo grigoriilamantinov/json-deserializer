@@ -1,6 +1,6 @@
 package com.manatee.mymap.services;
 
-import com.manatee.mymap.entities.FoundObject;
+import com.manatee.mymap.dto.FoundObject;
 
 import java.util.List;
 
