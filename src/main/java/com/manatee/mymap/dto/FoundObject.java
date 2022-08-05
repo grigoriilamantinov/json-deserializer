@@ -23,7 +23,7 @@ public class FoundObject {
         return placeId;
     }
 
-    public void setPlaceId(Long placeId) {
+    public void setPlaceId(final Long placeId) {
         this.placeId = placeId;
     }
 
@@ -31,7 +31,7 @@ public class FoundObject {
         return displayName;
     }
 
-    public void setDisplayName(String displayName) {
+    public void setDisplayName(final String displayName) {
         this.displayName = displayName;
     }
 
@@ -39,7 +39,7 @@ public class FoundObject {
         return geojson;
     }
 
-    public void setGeojson(Geojson geojson) {
+    public void setGeojson(final Geojson geojson) {
         this.geojson = geojson;
     }
 

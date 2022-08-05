@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
+import com.manatee.mymap.dto.CoordinatePoint;
 import com.manatee.mymap.dto.Geojson;
 
 import java.io.IOException;
@@ -11,13 +12,12 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class GeojsonDeserialaizerLegacy extends StdDeserializer<Geojson> {
-
-    public GeojsonDeserialaizerLegacy() {
+public class GeojsonDeserialaizer extends StdDeserializer<Geojson> {
+    public GeojsonDeserialaizer() {
         this(null);
     }
 
-    protected GeojsonDeserialaizerLegacy(Class<?> vc) {
+    protected GeojsonDeserialaizer(Class<?> vc) {
         super(vc);
     }
 
@@ -25,7 +25,7 @@ public class GeojsonDeserialaizerLegacy extends StdDeserializer<Geojson> {
     public Geojson deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
         final JsonNode node = p.getCodec().readTree(p);
         final String type = node.get("type").asText();
-        List<Double> coordinates = new ArrayList<>();
+        List<CoordinatePoint> coordinates = new ArrayList<>();
         final var coordinatesJSON = node.findValue("coordinates").iterator();
         switch (type) {
             case "Point":
@@ -46,25 +46,28 @@ public class GeojsonDeserialaizerLegacy extends StdDeserializer<Geojson> {
         return new Geojson(type, coordinates);
     }
 
-    private List<Double> getFromPoint(final Iterator<JsonNode> pointNode){
-        List<Double> coordinates = new ArrayList<>();
-            coordinates.add(pointNode.next().asDouble());
-            coordinates.add(pointNode.next().asDouble());
+    private List<CoordinatePoint> getFromPoint(final Iterator<JsonNode> pointNode){
+        final CoordinatePoint coordinatePoint = new CoordinatePoint();
+        coordinatePoint.setLongitude(pointNode.next().asDouble());
+        coordinatePoint.setLatitude(pointNode.next().asDouble());
+
+        final List<CoordinatePoint> coordinates = new ArrayList<>();
+        coordinates.add(coordinatePoint);
+
         return coordinates;
     }
 
-    private List<Double> getFromLineString(final Iterator<JsonNode> lineStringNode){
-        List<Double> coordinates = new ArrayList<>();
+    private List<CoordinatePoint> getFromLineString(final Iterator<JsonNode> lineStringNode){
+        List<CoordinatePoint> coordinates = new ArrayList<>();
         while (lineStringNode.hasNext()) {
-            var pointNode = lineStringNode.next();
-            coordinates.add(pointNode.get(0).asDouble());
-            coordinates.add(pointNode.get(1).asDouble());
+            var pointNode = lineStringNode.next().iterator();
+            coordinates.addAll(this.getFromPoint(pointNode));
         }
         return coordinates;
     }
 
-    private List<Double> getFromMultiLineString(final Iterator<JsonNode> multiLineStringNode){
-        List<Double> coordinates = new ArrayList<>();
+    private List<CoordinatePoint> getFromMultiLineString(final Iterator<JsonNode> multiLineStringNode){
+        List<CoordinatePoint> coordinates = new ArrayList<>();
         while (multiLineStringNode.hasNext()) {
             var lineStringNode = multiLineStringNode.next().iterator();
             coordinates.addAll(this.getFromLineString(lineStringNode));
@@ -72,8 +75,8 @@ public class GeojsonDeserialaizerLegacy extends StdDeserializer<Geojson> {
         return coordinates;
     }
 
-    private List<Double> getFromMultiPolygon(final Iterator<JsonNode> coordinatesJSON){
-        List<Double> coordinates = new ArrayList<>();
+    private List<CoordinatePoint> getFromMultiPolygon(final Iterator<JsonNode> coordinatesJSON){
+        List<CoordinatePoint> coordinates = new ArrayList<>();
         while (coordinatesJSON.hasNext()) {
             var polygon = coordinatesJSON.next().iterator();
             coordinates.addAll(this.getFromMultiLineString(polygon));

@@ -12,7 +12,6 @@ Search results on demand <th th:text="${wantedObject.getObjectName()}"></th>:
 <div th:each="foundObject : ${resultModel}">
     <a th:href="@{/object/{name}/{id}(name=${foundObject.getDisplayName()}, id=${foundObject.getPlaceId()})}" th:text="INFO"></a>
     <th th:text="${foundObject.getDisplayName}"></th>
-    <th th:text="${foundObject.getGeojson.getType}"></th>
     </div>
 </body>
 </html>

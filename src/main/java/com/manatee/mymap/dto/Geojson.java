@@ -1,54 +1,47 @@
 package com.manatee.mymap.dto;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.manatee.mymap.common.GeojsonDeserialaizerLegacy;
+import com.manatee.mymap.common.GeojsonDeserialaizer;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @NoArgsConstructor
-@JsonDeserialize(using = GeojsonDeserialaizerLegacy.class)
+@JsonDeserialize(using = GeojsonDeserialaizer.class)
 public class Geojson {
     private String type;
-    private List<Double> coordinates;
+    private List<CoordinatePoint> coordinates;
 
-    public Geojson(String type, List<Double> coordinates) {
+    public Geojson(final String type, final List<CoordinatePoint> coordinates) {
         this.type = type;
         this.coordinates = coordinates;
     }
 
-    public AveragePoint getAverageCoordinates(List<Double> coordinates) {
-        double latitudeSum = 0.0;
-        double longitudeSum = 0.0;
-        int counter = 0;
+    public AverageCoordinatePoint getAverageCoordinates(final List<CoordinatePoint> coordinates) {
+        final double averageLatitude = coordinates.stream()
+            .map(coordinatePoint -> coordinatePoint.getLatitude())
+            .reduce(0.0, Double::sum) / coordinates.size();
 
-        for (int i = 0; i < coordinates.size(); i++) {
-            if (i %2 == 0) {
-                latitudeSum += coordinates.get(i);
-                counter++;
-            } else {
-                longitudeSum += coordinates.get(i);
-            }
-        }
+        final var averageLongitude = coordinates.stream()
+            .map(CoordinatePoint::getLongitude)
+            .reduce(0.0, Double::sum) / coordinates.size();
 
-        final double averageLatitude = latitudeSum / counter;
-        final double averageLongitude = longitudeSum / counter;
-        return new AveragePoint(averageLatitude, averageLongitude);
+        return new AverageCoordinatePoint(averageLatitude, averageLongitude);
     }
 
     public String getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(final String type) {
         this.type = type;
     }
 
-    public List<Double> getCoordinates() {
+    public List<CoordinatePoint> getCoordinates() {
         return coordinates;
     }
 
-    public void setCoordinates(List<Double> coordinates) {
+    public void setCoordinates(final List<CoordinatePoint> coordinates) {
         this.coordinates = coordinates;
     }
 

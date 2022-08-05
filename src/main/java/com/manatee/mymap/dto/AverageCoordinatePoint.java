@@ -11,11 +11,11 @@ import lombok.Setter;
 @EqualsAndHashCode
 @NoArgsConstructor
 @RequiredArgsConstructor
-public class AveragePoint {
+public class AverageCoordinatePoint {
     private Double averageLatitude;
     private Double averageLongitude;
 
-    public AveragePoint(Double latitude, Double longitude) {
+    public AverageCoordinatePoint(final Double latitude, final Double longitude) {
         this.averageLatitude = latitude;
         this.averageLongitude = longitude;
     }
